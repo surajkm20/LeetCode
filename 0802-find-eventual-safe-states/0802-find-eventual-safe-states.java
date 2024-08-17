@@ -1,42 +1,42 @@
 class Solution {
-    public List<Integer> eventualSafeNodes(int[][] adj) {
-        int V = adj.length;
-        int[] outdegree = new int[V];
-        for(int j=0;j<adj.length;j++){
-            outdegree[j] = adj[j].length;
+    public List<Integer> eventualSafeNodes(int[][] graph) {
+        List<List<Integer>> adj = new ArrayList<>();
+        List<Integer> ans = new ArrayList<>();
+        int n = graph.length;
+        int[] indegree = new int[n];
+        for(int i=0;i<n;i++){
+            adj.add(new ArrayList<>());
+            indegree[i] = 0;
         }
-        
-        ArrayList<ArrayList<Integer>> outEdges = new ArrayList<>();
-        for(int i=0;i<V;i++){
-            outEdges.add(new ArrayList<>());
-        }
-
-        for(int i=0;i<adj.length;i++){
-            for(int j=0;j<adj[i].length;j++){
-                outEdges.get(adj[i][j]).add(i);
+        for(int i=0;i<n;i++){
+            for(int j=0;j<graph[i].length;j++){
+                adj.get(graph[i][j]).add(i);
+                indegree[i]++;
             }
         }
+        // for(int i=0;i<n;i++){
+        //     System.out.println(indegree[i]);
+        // }
+
         Queue<Integer> queue = new LinkedList<>();
-        ArrayList<Integer> ans = new ArrayList<>();
-        for(int i=0;i<V;i++){
-            if(outdegree[i] == 0){
+        for(int i=0;i<n;i++){
+            if(indegree[i] == 0){
                 queue.add(i);
                 ans.add(i);
             }
         }
-        
+
         while(!queue.isEmpty()){
-            int ele = queue.remove();
-            
-            for(int j : outEdges.get(ele)){
-                outdegree[j]--;
-                if(outdegree[j] == 0){
-                    queue.add(j);
-                    ans.add(j);
+            int top = queue.remove();
+
+            for(int i=0;i<adj.get(top).size();i++){
+                indegree[adj.get(top).get(i)]--;
+                if(indegree[adj.get(top).get(i)] == 0){
+                    queue.add(adj.get(top).get(i));
+                    ans.add(adj.get(top).get(i));
                 }
             }
         }
-
         Collections.sort(ans);
         return ans;
     }
