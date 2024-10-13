@@ -20,12 +20,10 @@ class Solution {
         int leftS = func(root.left, ans);
         int rightS = func(root.right, ans);
 
+        leftS = leftS < 0 ? 0 : leftS;
+        rightS = rightS < 0 ? 0 : rightS;
         ans[0] = Math.max(ans[0], leftS+rightS+root.val);
-        ans[0] = Math.max(ans[0], root.val);
-        ans[0] = Math.max(ans[0], root.val+leftS);
-        ans[0] = Math.max(ans[0], root.val+rightS);
-
-        return Math.max(Math.max(rightS, leftS)+root.val, root.val);
+        return Math.max(leftS, rightS)+root.val;
     }
     public int maxPathSum(TreeNode root) {
         int[] ans = new int[1];
